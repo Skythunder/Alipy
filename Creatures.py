@@ -2,9 +2,10 @@ import random as rnd
 
 ##Defines a few possible food and creature types
 MOISTURE=0
-HERBIVORE=1
-CARNIVORE=2
-OMNIVORE=3
+PLANT=1
+HERBIVORE=2
+CARNIVORE=3
+OMNIVORE=4
 
 ##Defines possible reprodution types
 ASEXUAL=0
@@ -23,32 +24,37 @@ class Creature:
 
     ##creature_id: unique id for creature
     ##creature_type: defines the creature's type
+    ##predator: defines the creature's natural predator
+    ##prey: defines the creature's natural prey
     #creature_type=HERBIVORE,food=MOISTURE,reprodution=ASEXUAL,speed=0
-    def __init__(self,creature_id=-1,creature_type=0,energy=1000,gene=[],
-                 xpos=-1,ypos=-1,color=(0,0,0)):
+    def __init__(self,creature_id=-1,creature_type=1,predator=2,prey=0,
+                 energy=1000,gene=[],xpos=-1,ypos=-1,color=(0,0,0)):
         self.creature_id=creature_id
         self.creature_type=creature_type
+        self.predator=predator
+        self.prey=prey
         self.xpos=xpos
         self.ypos=ypos
         self.energy=energy
         self.color=color
+        self.gene=gene
         if bool(gene):
             self.parseGene(gene)
 
     #Converts gene data into creature stats
     def parseGene(self,gene):
         self.color=(gene[0],gene[1],gene[2])
-        self.speed=int(gene[4]*(float(MAX_SPEED)/255))
+        self.speed=int(gene[3]*(float(MAX_SPEED)/255))
         #FIX WHEN VISION_CONE IS IMPLEMENTED!!
-        if gene[5]<255/2:
+        if gene[4]<255/2:
             self.eye_type=VISION_AURA
         else:
             self.eye_type=VISION_TUNNEL
-        er=int(gene[6]*(float(self.eye_type[2])/255))
+        er=int(gene[5]*(float(self.eye_type[2])/255))
         if er==0:er=1
         self.eye_range=er
-        self.mutation_rate=gene[7]*(0.5/255)
-        if gene[8]<255/2:
+        self.mutation_rate=gene[6]*(0.5/255)
+        if gene[7]<255/2:
             self.reprodution_type=ASEXUAL
         else:
             self.reprodution_type=SEXUAL
@@ -56,7 +62,7 @@ class Creature:
     #Creates and sets random gene
     def generateGene(self,set_gene=True,parse_gene=True):
         gene=[]
-        for x in xrange(9):
+        for x in xrange(8):
             gene.append(rnd.randint(0,255))
         if set_gene:
             self.gene=gene
@@ -81,6 +87,10 @@ class Creature:
         s+= str(self.creature_id)
         s+="\nType: "
         s+= str(self.creature_type)
+        s+="\nPredator: "
+        s+= str(self.predator)
+        s+="\nPrey: "
+        s+= str(self.prey)
         s+="\nX: "
         s+= str(self.xpos)
         s+="\nY: "
@@ -99,5 +109,7 @@ class Creature:
         s+= str(self.mutation_rate)
         s+="\nReprodution Type: "
         s+= str(self.reprodution_type)
+        s+="\nGene: "
+        s+= str(self.gene)
         return s        
 
