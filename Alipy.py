@@ -49,6 +49,7 @@ world.readPop("lista.csv")
 # run the main loop
 print_creatures = False
 print_creatures_file = False
+stats = False
 while True:
     #process events
     for event in pg.event.get():
@@ -66,6 +67,8 @@ while True:
                 print_creatures=True
             if event.key == ord('w'):
                 print_creatures_file=True
+            if event.key == ord('s'):
+                stats=True
     #update world
     for k in world.creatures.keys():
         if world.creatures[k]:
@@ -75,6 +78,11 @@ while True:
         header="id;type;predator;prey;energy;r;g;b;speed;eye_type;eye_range;mut_rate;rep_type;xpos;ypos"
         f=open("creatures.csv","w")
         f.write(header+"\n")
+    speed=0
+    erange=0
+    cnt=0
+    aura=0
+    tunnel=0
     #draw world
     screen.fill(WHITE)
     for k in tile_list.keys():
@@ -93,12 +101,26 @@ while True:
                 print str(c)
             if print_creatures_file:
                 f.write(c.str_csv()+"\n")
-                
+            if stats:
+                speed+=c.speed
+                erange+=c.eye_range
+                cnt+=1
+                if c.eye_type==0:
+                    aura+=1
+                else:
+                    tunnel+=1
     if print_creatures:
         print_creatures=False
     if print_creatures_file:
         f.close()
         print_creatures_file=False
+    if stats:
+        print "Statistics:"
+        print "Medium speed: "+str(speed/float(cnt))
+        print "Medium Eye Range: "+str(erange/float(cnt))
+        print "Percentage of Aura Vision: "+str(aura/float(cnt))
+        print "Percentage of Tunnel Vision: "+str(tunnel/float(cnt))
+        stats=False
                 
     pg.display.update()
     mainClock.tick(fps)
