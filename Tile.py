@@ -16,7 +16,7 @@ class Tile:
     ###tile_type: one of the possible tile types
     ###content: creature currently in tile
     ###moisture: amount of moisture in tile - [0,1] - multiply by world.feed_reward
-    def __init__(self,tile_id=-1,xpos=-1,ypos=-1,tile_type=NORMAL,moisture=0.1,content=None):
+    def __init__(self,tile_id=-1,xpos=-1,ypos=-1,tile_type=NORMAL,moisture=0.5,content=None):
         self.tile_id=tile_id
         self.xpos=xpos
         self.ypos=ypos

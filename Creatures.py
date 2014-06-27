@@ -82,6 +82,40 @@ class Creature:
         dmax=441.67295593
         return 1-(d*(1.0/dmax))
 
+    #Returns string in csv format
+    def str_csv(self):
+        s=""
+        s+=str(self.creature_id)
+        s+=";"
+        s+=str(self.creature_type)
+        s+=";"
+        s+=str(self.predator)
+        s+=";"
+        s+=str(self.prey)
+        s+=";"
+        s+=str(self.energy)
+        s+=";"
+        s+=str(self.gene[0])
+        s+=";"
+        s+=str(self.gene[1])
+        s+=";"
+        s+=str(self.gene[2])
+        s+=";"
+        s+=str(self.gene[3])
+        s+=";"
+        s+=str(self.gene[4])
+        s+=";"
+        s+=str(self.gene[5])
+        s+=";"
+        s+=str(self.gene[6])
+        s+=";"
+        s+=str(self.gene[7])
+        s+=";"
+        s+=str(self.xpos)
+        s+=";"
+        s+=str(self.ypos)
+        return s
+
     def __str__(self):
         s="Creature: "
         s+= str(self.creature_id)

@@ -1,0 +1,2 @@
+name;nrows;ncols;tile_width;tile_height;world_type;turn_cost;move_cost;breed_cost;hunt_cost;feed_reward
+Alipy;50;50;10;10;1;10;10;400;50;100

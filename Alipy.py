@@ -14,6 +14,7 @@ mainClock = pg.time.Clock()
 fps=10
 #setup world
 world = World("Alipy",nrows=50,ncols=50)
+world.readWorld("world.csv")
 tile_list=defaultdict(dict)
 tw=world.tile_width
 th=world.tile_height
@@ -47,6 +48,7 @@ world.readPop("lista.csv")
 #print str(ccc)
 # run the main loop
 print_creatures = False
+print_creatures_file = False
 while True:
     #process events
     for event in pg.event.get():
@@ -62,11 +64,17 @@ while True:
                     fps=10
             if event.key == ord('p'):
                 print_creatures=True
+            if event.key == ord('w'):
+                print_creatures_file=True
     #update world
     for k in world.creatures.keys():
         if world.creatures[k]:
             world.act(world.creatures[k])
-            #print world.creatures[k].energy
+    #ready statistics
+    if print_creatures_file:
+        header="id;type;predator;prey;energy;r;g;b;speed;eye_type;eye_range;mut_rate;rep_type;xpos;ypos"
+        f=open("creatures.csv","w")
+        f.write(header+"\n")
     #draw world
     screen.fill(WHITE)
     for k in tile_list.keys():
@@ -83,8 +91,14 @@ while True:
                 pg.draw.arc(screen,color,tile_list[k],0,180,4)
             if print_creatures:
                 print str(c)
+            if print_creatures_file:
+                f.write(c.str_csv()+"\n")
+                
     if print_creatures:
         print_creatures=False
+    if print_creatures_file:
+        f.close()
+        print_creatures_file=False
                 
     pg.display.update()
     mainClock.tick(fps)

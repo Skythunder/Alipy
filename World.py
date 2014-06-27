@@ -25,7 +25,7 @@ def mutate(gene):
     ri=rnd.randint(3,len(gene)-1)
     rx=rnd.randint(0,255)
     ri2=rnd.randint(0,2)
-    rc=rnd.randint(-20,+20)
+    rc=rnd.randint(-25,+25)
     gene[ri]=rx
     if gene[ri2]+rc<0:
         gene[ri2]=0
@@ -67,7 +67,7 @@ class World:
     ###creature_cnt: counter for creatures
     def __init__(self,name,nrows=20,ncols=20,tile_width=10,tile_height=10,
                  world_type=CIRCULAR,turn_cost=10,move_cost=10,breed_cost=400,
-                 hunt_cost=20,feed_reward=100,creatures=defaultdict(dict),
+                 hunt_cost=50,feed_reward=100,creatures=defaultdict(dict),
                  mutation=mutate,cross=crossover):
         self.name=name
         self.nrows=nrows
@@ -106,8 +106,26 @@ class World:
             self.creatures[r[0]]=c
             t=self.getTile(r[14],r[13])
             t.content=c
-            if c.creature_type==1:
-                print str(c)
+        f.close()
+
+    ##reads world from file
+    def readWorld(self,filename):
+        f = open(filename,"r")
+        content = f.readlines()
+        content=content[1:len(content)]
+        x=content[0]
+        r=x.split(";")
+        self.name=r[0]
+        self.nrows=int(r[1])
+        self.ncols=int(r[2])
+        self.tile_width=int(r[3])
+        self.tile_height=int(r[4])
+        self.world_type=int(r[5])
+        self.turn_cost=int(r[6])
+        self.move_cost=int(r[7])
+        self.breed_cost=int(r[8])
+        self.hunt_cost=int(r[9])
+        self.feed_reward=int(r[10])
         f.close()
 
     ##generate random population
@@ -441,7 +459,7 @@ class World:
         
         if a.prey==MOISTURE:
             #a.energy+=int(t.moisture*self.feed_reward)
-            a.energy+=self.feed_reward/2#t.moisture*
+            a.energy+=self.feed_reward*t.moisture
             #a.energy+=self.turn_cost+1
             if a.energy>MAX_ENERGY:
                 a.energy=MAX_ENERGY
